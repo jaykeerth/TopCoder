@@ -1,0 +1,97 @@
+import java.util.*;
+ 
+class State
+{
+    int duration;
+    int tone;
+    boolean visited;
+    State(int duration, int tone)
+    {
+        this.duration = duration;
+        this.tone = tone;
+        visited = false;
+    }
+}
+class StateComparator implements Comparator<State>
+{
+    @Override
+    public int compare(State s1, State s2)
+    {
+        if(s1.duration < s2.duration)
+            return -1;
+        else if(s1.duration > s2.duration)
+            return 1;
+        else
+            return 0;
+    }
+}
+public class GUMIAndSongsDiv2 {
+ 
+    public int maxSongs(int duration[], int[] tone, int T)
+    {
+        State[] states = new State[duration.length];
+        for(int i=0; i<duration.length; i++)
+        {
+            states[i] = new State(duration[i], tone[i]);
+        }
+        Arrays.sort(states, new StateComparator());
+        //for(State s: states)
+            //System.out.println(s.duration);
+        int lastSong;
+        int totalTime;
+        int maxSongs = 0;
+        if(states[0].duration < T)
+        {
+            lastSong = 0;
+            totalTime = states[0].duration;
+            states[0].visited = true;
+            maxSongs += 1;
+            System.out.println("last song index picked: "+lastSong+ "totalTime: "+totalTime+ "maxSongs count: "+maxSongs);
+        }
+        else
+        {
+            return maxSongs;
+        }
+        int temp = totalTime;
+        int min = Integer.MAX_VALUE;
+        int statePicked = lastSong;
+         
+        for(int i=1; i<states.length; i++)
+        {
+            for(int j=i; j<states.length; j++)
+            {
+               if(states[j].visited == false)
+               {
+                temp = totalTime + states[i].duration + Math.abs(states[i].tone - states[lastSong].tone);
+                if(temp < min)
+                {
+                    min = temp;
+                    statePicked = j;
+                    System.out.println("min val :"+min+" state picked: "+statePicked);
+                }
+               }
+            }
+             
+            if(states[statePicked].visited == false && min <= T)
+            {
+                lastSong = statePicked;
+                states[statePicked].visited = true;
+                totalTime = min;
+                maxSongs += 1;
+                System.out.println("last song index picked: "+lastSong+ "totalTime: "+totalTime+ "maxSongs count: "+maxSongs);
+            }
+            else if(states[statePicked].visited == false && min > T)
+                return maxSongs;
+        }
+        return maxSongs;
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+        GUMIAndSongsDiv2 g = new GUMIAndSongsDiv2();
+        int duration[] = {5611,39996,20200,56574,81643,90131,33486,99568,48112,97168,5600,49145,73590,3979,94614};
+        int tone[] = {2916,53353,64924,86481,44803,61254,99393,5993,40781,2174,67458,74263,69710,40044,80853};
+        System.out.println(g.maxSongs(duration, tone, 302606));
+    }
+ 
+}
