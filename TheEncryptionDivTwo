@@ -1,0 +1,30 @@
+import java.util.*;
+public class TheEncryptionDivTwo {
+ 
+    public String encrypt(String message)
+    {
+        HashMap<Character, Character> hm = new HashMap<Character, Character>();
+        char arr[] = message.toCharArray();
+        String res = "";
+        int j = 97;   //or char m = 'a';
+        for(char c: arr)
+        {
+            if(!hm.containsKey(c))
+            {
+                res += (char)j;
+                hm.put(c, (char)j);
+                j++;
+            }
+            else
+            {
+                res += hm.get(c);
+            }
+        }
+        return res;
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+    }
+ 
+}
