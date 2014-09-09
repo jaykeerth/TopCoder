@@ -1,0 +1,28 @@
+public int minJumps (int arr[])
+    {
+        int jumps[] = new int[arr.length];
+        HashMap<Integer, String> hm = new HashMap<Integer, String>();
+        jumps[0] = 0;
+        hm.put(0, ""+0);
+        for(int i=1; i<jumps.length; i++)
+        {
+            jumps[i] = Integer.MAX_VALUE;
+            hm.put(i, "");
+        }
+        for(int i=1; i<arr.length; i++)
+        {
+            for(int j=0; j<i; j++)
+            {
+                if(arr[j] >= (i-j))
+                {
+                    if(jumps[j] + 1 < jumps[i])
+                    { 
+                        jumps[i] = jumps[j] + 1;
+                        hm.put(i, hm.get(j)+" "+i);
+                    }
+                }
+            }
+        }
+        System.out.println("Jump indexes: "+hm.get(arr.length-1));
+        return jumps[arr.length-1];
+    }
