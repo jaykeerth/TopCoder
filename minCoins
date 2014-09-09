@@ -1,0 +1,22 @@
+public int minCoins(int coins[], int sum)
+    {
+        int min[] = new int[sum+1];
+        HashMap<Integer, String> hm = new HashMap<Integer, String>();
+        min[0] = 0;
+        hm.put(0, "");
+        for(int i=1; i<min.length; i++)
+            min[i] = Integer.MAX_VALUE;
+        for(int i=1; i<=sum; i++)
+        {
+            for(int j=0; j<coins.length; j++)
+            {
+                if(coins[j] <= i && min[i-coins[j]] + 1 < min[i])
+                {
+                    min[i] = min[i-coins[j]] + 1;
+                    hm.put(i, hm.get(i-coins[j])+" "+coins[j]);
+                }
+            }
+        }
+        System.out.println("Coins used : "+hm.get(sum));
+        return min[sum];
+    }
