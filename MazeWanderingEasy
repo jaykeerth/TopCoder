@@ -1,0 +1,80 @@
+import java.util.*;
+public class MazeWanderingEasy {
+
+	public int decisions(String[] maze) {
+		LinkedList<State> q = new LinkedList<State>();
+		boolean visited[][] = new boolean[maze.length+1][maze[0].length()+1];
+		int[] dx = new int[]{1, 0, -1, 0};
+		int[] dy = new int[]{0, 1, 0, -1};
+		for(int i=0; i<maze.length; i++)
+		{
+			for(int j=0; j<maze[0].length(); j++)
+			{
+				if(maze[i].charAt(j) == 'M')
+				{
+					State start = new State(i, j, 'M', 0);
+					q.add(start);
+					break;
+				}
+			}
+		}
+		while(!q.isEmpty())
+		{
+			State curr = q.removeFirst();
+			if(curr.c == '*')
+			{
+				return curr.decisions;
+			}
+			visited[curr.x][curr.y] = true;
+			int freeCount = 0;
+			for(int i=0; i<dx.length; i++)
+			{
+				if(curr.x+dx[i] < 0 || curr.x+dx[i] >= maze.length || curr.y+dy[i] < 0 || curr.y+dy[i] >= maze[0].length())
+				    continue;
+				if(visited[curr.x+dx[i]][curr.y+dy[i]])
+					continue;
+				if(maze[curr.x+dx[i]].charAt(curr.y+dy[i]) == 'X')
+					continue;
+				freeCount++;
+			}
+			for(int i=0; i<dx.length; i++)
+			{
+				if(curr.x+dx[i] < 0 || curr.x+dx[i] >= maze.length || curr.y+dy[i] < 0 || curr.y+dy[i] >= maze[0].length())
+				    continue;
+				if(visited[curr.x+dx[i]][curr.y+dy[i]])
+					continue;
+				if(maze[curr.x+dx[i]].charAt(curr.y+dy[i]) == 'X')
+					continue;
+				int tempX = curr.x;
+				int tempY = curr.y;
+				int tempDecisions = curr.decisions;
+				State Q;
+				if(freeCount > 1)
+				{
+				     Q = new State(tempX+dx[i], tempY+dy[i], maze[tempX+dx[i]].charAt(tempY+dy[i]), tempDecisions+1);
+				}
+				else
+				{
+					Q = new State(tempX+dx[i], tempY+dy[i], maze[tempX+dx[i]].charAt(tempY+dy[i]), tempDecisions);
+				}
+				q.add(Q);
+			}
+		}
+	
+		return 0;
+	}
+}
+class State
+{
+	int x;
+	int y;
+	char c;
+	int decisions;
+	State(int x, int y, char c, int decisions)
+	{
+		this.x = x;
+		this.y = y;
+		this.c = c;
+		this.decisions = decisions;
+	}
+}
