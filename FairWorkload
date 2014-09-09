@@ -1,0 +1,86 @@
+public class FairWorkload {
+ 
+    public int getMostWork(int[] folders, int workers)
+    {
+        int max = Integer.MIN_VALUE;
+        int total = 0;
+        for(int i=0; i<folders.length; i++)
+        {
+            max = Math.max(max, folders[i]);
+            total += folders[i];
+        }
+        int low = max;
+        int high = Integer.MAX_VALUE;
+        int currSum;
+        int reqWorkers;
+        int mid;
+        int i;
+        while(low < high)
+        {
+            mid = low + (high - low)/2;
+            reqWorkers = 1;
+            currSum = 0;
+            for(i=0; i<folders.length; i++)
+            {
+                if(currSum + folders[i] <= mid)
+                    currSum += folders[i];
+                else
+                {
+                    currSum = folders[i];
+                    reqWorkers ++;
+                }
+            }
+            if(reqWorkers <= workers)
+                high = mid;
+            else
+                low = mid + 1;
+        }
+        return low;
+    }
+    public int getMostWork1(int[] folders, int workers)
+    {
+        int i, j, k;
+        int bitCount;
+        int minOverall = Integer.MAX_VALUE;
+        int maxInConfig = Integer.MIN_VALUE;
+        int currSum = 0;
+        for(i=0; i<(1<<folders.length); i++)
+        {
+            bitCount = 0;
+            for(j=0; j<folders.length; j++)
+            {
+               if((i & (1<<j)) > 0)
+                  bitCount++;          
+            }
+            if(bitCount != workers-1)
+                continue;
+            //System.out.println("Bitcount: "+bitCount);
+            maxInConfig = Integer.MIN_VALUE;
+            currSum = 0;
+            for(k=0; k<folders.length; k++)
+            {
+                currSum += folders[k];
+                //System.out.println("Adding folder: "+k);
+                if((i & (1<<k)) > 0)
+                {
+                    maxInConfig = Math.max(maxInConfig, currSum);
+                    currSum = 0;
+                }
+            }
+            maxInConfig = Math.max(maxInConfig, currSum);
+            //System.out.println("max in this config: "+maxInConfig);
+            minOverall = Math.min(minOverall, maxInConfig);
+            //System.out.println("New minOverall: "+minOverall);
+        }
+        return minOverall;
+    }
+     
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+        FairWorkload f = new FairWorkload();
+        int[] folders = new int[]{10, 20, 30, 40, 50, 60, 70, 80, 90};
+        System.out.println(f.getMostWork1(folders, 3));
+    }
+ 
+}
