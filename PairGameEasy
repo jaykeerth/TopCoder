@@ -1,0 +1,50 @@
+import java.util.*;
+ 
+public class PairGameEasy {
+ 
+    public String able(int a, int b, int c, int d) {
+       ArrayList<State> list = new ArrayList<State>();
+       State s = new State(a, b);
+       State target = new State(c, d);
+       list.add(s);
+       return ableUtil(list, target);
+    }
+ 
+    public String ableUtil(ArrayList<State> list, State target)
+    {
+        if(list.size() == 0)
+            return "Not able to generate";
+        //System.out.println(list.size());
+        ArrayList<State> tempList = new ArrayList<State>();
+        for(State s: list)
+        {
+            if(s.x == target.x && s.y == target.y)
+            {
+                return "Able to generate";
+            }
+                 
+            if(s.x > target.x && s.y > target.y)
+                continue;
+            State j = new State(s.x+s.y, s.y);
+            State k = new State(s.x, s.x+s.y);
+            if(s.y > target.y && (s.x+s.y) > target.x)
+                continue;
+            else if(s.x > target.x && (s.x+s.y) > target.y)
+                continue;
+            tempList.add(j);
+            tempList.add(k);        
+        }
+        return ableUtil(tempList, target);
+    }
+}
+ 
+class State 
+{
+    int x;
+    int y;
+    State(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
