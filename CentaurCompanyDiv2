@@ -1,0 +1,66 @@
+public class CentaurCompanyDiv2 {
+    int graph[][];
+    int degree[];
+	long mem[][];
+	boolean solved[][];
+	public long count(int[] a, int[] b) {
+		int n = a.length + 1;
+		graph = new int[n][n];
+		degree = new int[n];
+		createGraph(a, b, 0, -1);
+		solved = new boolean[2][n];
+		mem = new long[2][n];
+		return countSubtrees(0, 0) + 1;
+	}
+	public long countSubtrees(int flag, int node)
+	{
+		long res = 0;
+		if(solved[flag][node] == true)
+		{
+			return mem[flag][node];
+		}
+		solved[flag][node] = true;
+		if(flag == 0)
+		{
+			res = countSubtrees(1, node);
+			for(int i=0; i<degree[node]; i++)
+				res += countSubtrees(0, graph[node][i]);
+		}
+		else if(flag == 1)
+		{
+			res = 1;
+			long temp;
+			for(int i=0; i<degree[node]; i++)
+			{
+				temp = countSubtrees(1, graph[node][i]);
+				res *= (temp + 1);
+			}
+		}
+		mem[flag][node] = res;
+		return res;
+	}
+	public void createGraph(int[] a, int[] b, int node, int parent)
+	{
+		for(int i=0; i<a.length; i++)
+		{
+			if(a[i] == node + 1 || b[i] == node + 1)
+			{
+				int j;
+				if(a[i] == node + 1)
+			    {
+				  j = b[i] - 1;
+			    }
+			    else 
+			    {
+				  j = a[i] - 1;
+			    }
+			    if(j != parent)
+			    {
+				   graph[node][degree[node]++] = j;
+				   createGraph(a, b, j, node);
+			    }
+			}
+		}
+	}
+
+}
