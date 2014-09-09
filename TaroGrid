@@ -1,0 +1,39 @@
+public class TaroGrid {
+ 
+    public int getNumber(String[] grid)
+    {
+        int maxInCol = 1;
+        int maxOverall = 1;
+        int val[] = new int[grid.length];
+        for(int i=0; i<grid.length; i++)
+        {
+            val[0] = 1;
+            for(int j=1; j<grid.length; j++)
+            {
+                if(grid[j].charAt(i) == grid[j-1].charAt(i))
+                {
+                    val[j] = val[j-1] + 1;  
+                }
+                else
+                {
+                    val[j] = 1;
+                }
+                if(maxInCol < val[j])
+                       maxInCol = val[j];
+            }
+            if(maxOverall < maxInCol)
+                maxOverall = maxInCol;
+        }
+        return maxOverall;
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+        String[] grid = new String[]{"BWW",
+                 "BBB",
+         "BWB"};
+        TaroGrid t = new TaroGrid();
+        System.out.println(t.getNumber(grid));
+    }
+ 
+}
