@@ -1,0 +1,43 @@
+import java.util.*;
+public class TheLargestString {
+ 
+    public String find(String s, String t)
+    {
+        ArrayList<String> list = new ArrayList<String>();
+        String[] str = new String[s.length()];
+        String first, last;
+        list.add(s+t);
+        System.out.println("added: "+(s+t));
+        //str[0] = s + t;
+        String temp1, temp2;
+        for(int i=0; i<s.length(); i++)
+        {
+            first = s.substring(0, i);
+            last = s.substring(i+1);
+            temp1 = first + last;
+            first = t.substring(0, i);
+            last = t.substring(i+1);
+            temp2 = first + last;
+            list.add(temp1+temp2);
+            System.out.println("Added: "+(temp1+temp2));
+            //str[i] = temp1 + temp2;
+        }
+        //Arrays.sort(str);
+        Collections.sort(list, new StrComparator());
+        return list.get(list.size()-1);
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+        TheLargestString l = new TheLargestString();
+        System.out.println(l.find("ab", "zy"));
+    }
+}
+class StrComparator implements Comparator<String>
+{
+    @Override
+    public int compare(String s1, String s2)
+    {
+        return s1.compareTo(s2);
+    }
+}
