@@ -1,0 +1,122 @@
+import java.util.*;
+ 
+public class SuffixArrayDiv2 {
+ 
+    class State
+    {
+        String suffix;
+        int index;
+        State()
+        {
+            suffix = null;
+        }
+        State(String suffix, int index)
+        {
+            this.suffix = suffix;
+            this.index = index;
+        }
+    }
+    class StateComparator implements Comparator<State>
+    {
+        public String sortChars(String s)
+        {
+            char arr[] = s.toCharArray();
+            Arrays.sort(arr);
+            return (new String(arr));
+        }
+        @Override
+        public int compare(State s1, State s2)
+        {
+            return sortChars(s1.suffix).compareTo(sortChars(s2.suffix));
+        }
+    }
+ 
+    ArrayList<String> smallStringList = new ArrayList<String>();
+    HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+     
+    public String smallerOne(String str)
+    {
+        for(int i=0; i<str.length(); i++)
+        {
+            if(i == 0)
+            {
+                hm.put(i,  str.charAt(i) - 'a');
+                //System.out.println("value of i= 0 in hm initialized: "+ (str.charAt(i) - 'a'));
+            }
+            else
+            {
+                hm.put(i, 25);  
+            }
+        }
+        char output[] = new char[str.length()];
+        generateSmallerStrings(str, output, 0);
+        smallStringList.remove(smallStringList.size()-1);
+        ArrayList<String> input = new ArrayList<String>();
+        input.add(str);
+        ArrayList<ArrayList<Integer>> suffixArrayList = getSuffixArrayList(smallStringList);
+        ArrayList<ArrayList<Integer>> inputSuffixArray = getSuffixArrayList(input);
+        int z;
+        for(ArrayList<Integer> suffixArray: suffixArrayList)
+        {
+            for(z=0; z<suffixArray.size(); z++)
+            {
+                if(suffixArray.get(z) != inputSuffixArray.get(0).get(z))
+                   break;
+            }
+            if(z == suffixArray.size())
+                return "Exists";
+        }
+        return "Does not exist";
+    }
+    public void generateSmallerStrings(String str, char output[], int trav)
+    {
+        if(trav == output.length)
+        {
+            smallStringList.add(new String(output));
+            return;
+        }
+        int val = hm.get(trav);
+        System.out.println("val is : "+ val);
+        for(char c='a'; c <= val + 'a'; c++)
+        {
+            if(c == val + 'a' && (trav+1) != output.length)
+            {
+                hm.put(trav+1, str.charAt(trav+1) - 'a');
+            }
+            output[trav] = c;
+            generateSmallerStrings(str, output, trav+1);
+        }
+    }
+    public ArrayList<ArrayList<Integer>> getSuffixArrayList(ArrayList<String> stringList)
+    {
+        int i;
+        State[] state;
+        ArrayList<ArrayList<Integer>> suffixArrayList = new ArrayList<ArrayList<Integer>>();
+        for(String s: stringList)
+        {
+            state = new State[s.length()];
+            System.out.println("String being split: "+s);
+            for(i=0; i<s.length(); i++)
+            {
+                //state[i].suffix = s.substring(i);
+                //state[i].index = i;
+                state[i] = new State(s.substring(i), i);
+                //System.out.println("State values are - suffix: "+state[i].suffix+" index: "+ state[i].index);
+            }
+            Arrays.sort(state, new StateComparator());
+            ArrayList<Integer> tempList = new ArrayList<Integer>();
+            for(State tempState: state)
+            {
+                tempList.add(tempState.index);
+            }
+            System.out.println("Suffix array is: "+tempList.toString());
+            suffixArrayList.add(tempList);
+        }
+        return suffixArrayList;
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+      SuffixArrayDiv2 obj = new SuffixArrayDiv2();
+      System.out.println(obj.smallerOne("examplesareveryweakthinktwicebeforesubmit"));
+    }
+}
