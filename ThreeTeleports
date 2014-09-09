@@ -1,0 +1,171 @@
+package tc;
+import java.util.*;
+public class ThreeTeleports {
+ 
+    public int shortestDistance(int xMe, int yMe, int xHome, int yHome, String[] teleports)
+    {
+        PriorityQueue<State> q = new PriorityQueue<State>(10, new StateComparator());
+        HashSet<State> hs = new HashSet<State>(); 
+        int[] dx = new int[]{1, -1, 0, 0};
+        int[] dy = new int[]{0, 0, 1, -1};
+        State s = new State(xMe, yMe);
+        q.offer(s);
+        hs.add(s);
+        State curr;
+        int tpX[] = new int[teleports.length*2];
+        int tpY[] = new int[teleports.length*2];
+        int k = 0; 
+        String StringArr[] = new String[4];
+        for(int i=0; i<teleports.length; i++)
+        {
+            StringArr = teleports[i].split(" ");
+            for(int j=0; j<StringArr.length; j+=2)
+            {
+                tpX[k] = Integer.parseInt(StringArr[j]);
+                tpY[k] = Integer.parseInt(StringArr[j+1]);
+                k++;
+            }
+        }
+        while(!q.isEmpty())
+        {
+            curr = q.poll();
+            if(curr.x == xHome && curr.y == yHome)
+                return curr.distance;
+            int tempX = 0;
+            int tempY = 0;  
+            for(int i=0; i<tpX.length; i+=2)
+            {
+                if((tpX[i] != curr.x && tpY[i] != curr.y) || (tpX[i] != curr.x || tpY[i] != curr.y)) 
+                {
+                    continue;
+                }
+                if(curr.teleports[i/2] == true)
+                {
+                    continue;
+                }
+                boolean[] teleTemp = new boolean[curr.teleports.length];
+                for(int d=0; d<curr.teleports.length; d++)
+                    teleTemp[d] = curr.teleports[d];
+                State Q = new State(tpX[i+1], tpY[i+1], curr.distance+10, teleTemp);
+                Q.teleports[i/2] = true;
+                q.offer(Q);
+                hs.add(Q);
+            }
+               
+               for(int r=1; r<tpX.length; r+=2)
+               {
+                   if(((tpX[r] != curr.x && tpY[r] != curr.y) || (tpX[r] != curr.x || tpY[r] != curr.y)))
+                       continue;
+                   if(curr.teleports[(r-1)/2] == true)
+                       continue;
+                   boolean[] teleTemp = new boolean[curr.teleports.length];
+                    for(int d=0; d<curr.teleports.length; d++)
+                        teleTemp[d] = curr.teleports[d];
+                    State Q = new State(tpX[r-1], tpY[r-1], curr.distance+10, teleTemp);
+                    Q.teleports[(r-1)/2] = true;
+                    q.offer(Q);
+                    hs.add(Q);
+               }
+             
+            for(int i=0; i<dx.length; i++)
+            {
+                tempX = curr.x + dx[i];
+                tempY = curr.y + dy[i];
+                State temp = new State(tempX, tempY);
+                if(hs.contains(temp) == true)
+                {
+                    continue;
+                }
+                boolean[] teleTemp = new boolean[curr.teleports.length];
+                for(int d=0; d<curr.teleports.length; d++)
+                    teleTemp[d] = curr.teleports[d];
+                State M = new State(tempX, tempY, curr.distance+1, teleTemp);
+                q.offer(M);
+                hs.add(M);
+            }
+        }
+        return -1;
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+  
+        ThreeTeleports t = new ThreeTeleports();
+        String teleports[] = new String[]{"3 10 5200 4900", "12212 8699 9999 30011", "12200 8701 5203 4845"};
+        System.out.println(t.shortestDistance(3, 7, 10000, 30000, teleports));
+    }
+}
+class State 
+{
+    int x;
+    int y;
+    int distance;
+    boolean[] teleports;
+    State(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        this.distance = 0;
+        this.teleports = new boolean[3];
+        for(int i=0; i<3; i++)
+            this.teleports[i] = false;
+    }
+    State(int x, int y, int distance, boolean[] teleports)
+    {
+        this.x = x;
+        this.y = y;
+        this.distance = distance;
+        this.teleports = teleports;
+    }
+    @Override
+    public boolean equals(Object o)
+    {
+       State s3 = (State) o;
+       if(this.x == s3.x && this.y == s3.y)
+       {
+           return true;
+       }
+       else
+       {
+           return false;
+       }
+    }
+    @Override
+    public int hashCode()
+    {
+        String ans = ""+this.x+this.y;
+        String newAns = "";
+        for(int i=0; i<ans.length(); i++)
+        {
+            if(ans.charAt(i) != '-')
+                newAns += ans.charAt(i); 
+        }
+        int hash = 0;
+        int mul = 1;
+        for(int i=ans.length()-1; i>=0; i--)
+        {
+            hash += ans.charAt(i) * mul;
+            mul *= 10;
+        }
+        if(this.x < 0 && this.y <0)
+            hash *= 13;
+        else if(this.x < 0)
+            hash *= 5;
+        else if(this.y < 0)
+            hash *= 7;
+        return hash;
+    }
+}
+ 
+class StateComparator implements Comparator<State>
+{
+    @Override
+    public int compare(State s1, State s2)
+    {
+        if(s1.distance < s2.distance)
+            return -1;
+        else if(s1.distance > s2.distance)
+            return 1;
+        else
+            return 0;
+    }
+}
