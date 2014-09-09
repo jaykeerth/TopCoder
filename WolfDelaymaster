@@ -1,0 +1,137 @@
+import java.util.*;
+public class WolfDelaymaster {
+ 
+    public String check(String str)
+    {
+        Stack<Character> st1 = new Stack<Character>();
+        Stack<Character> st2 = new Stack<Character>();
+        char arr[] = str.toCharArray();
+        boolean lastInsertedStack = true;
+        String original = "wolf";
+        char orig[] = original.toCharArray();
+        int k=0;
+        /*if(orig[k] == arr[0])
+            {
+                st1.push(arr[0]);
+                System.out.println("First char index 0 inserted in st1");
+                lastInsertedStack = true;
+            }
+        else
+                return "INVALID";*/
+        for(int i=0; i<arr.length; i++)
+        {
+        //  else
+            {
+                if(lastInsertedStack == true)
+                {
+                    if(st1.isEmpty())
+                    {
+                        st1.push(arr[i]);
+                        System.out.println("pushed "+arr[i]+" index: "+i+ "stack st1");
+                    }
+                    else if(arr[i] == st1.peek())
+                    {
+                        if(k != 0)
+                        {
+                            if(st2.isEmpty())
+                                return "INVALID";
+                            char temp = st2.pop();
+                            System.out.println("popped "+temp+ " from stack st2");  
+                        }
+                        st1.push(arr[i]);
+                        System.out.println("pushed "+arr[i]+" index: "+i+ "stack st1");
+                    }
+                    else
+                    {
+                        k++;
+                        if(k == 4)
+                        {
+                            k = 0;
+                            while(!st1.isEmpty())
+                                st1.pop();
+                            lastInsertedStack = true;
+                            i--;
+                            continue;
+                        }
+                        if(orig[k] == arr[i])
+                        {
+                            char temp = st1.pop();
+                            System.out.println("popped "+temp+ " from stack st1");
+                            if(!st2.isEmpty())
+                                return "INVALID";
+                            st2.push(arr[i]);
+                            System.out.println("pushed "+arr[i]+" index: "+i+ "stack st2");
+                            lastInsertedStack = false;
+                        }
+                        else
+                        {
+                            return "INVALID";
+                        }
+                    }
+                }
+                else
+                {
+                    if(arr[i] == st2.peek())
+                    {
+                        if(st1.isEmpty())
+                            return "INVALID";
+                        char temp = st1.pop();
+                        System.out.println("popped "+temp+ " from stack st1");
+                        st2.push(arr[i]);
+                        System.out.println("pushed "+arr[i]+" index: "+i+ "stack st2");
+                    }
+                    else
+                    {
+                        k++;
+                        if(k == 4)
+                        {
+                            k = 0;
+                            while(!st2.isEmpty())
+                                st2.pop();
+                            lastInsertedStack = true;
+                            i--;
+                            continue;
+                        }
+                        if(orig[k] == arr[i])
+                        {
+                            char temp = st2.pop();
+                            System.out.println("popped "+temp+ " from stack st2");
+                            if(!st1.isEmpty())
+                                return "INVALID";
+                            st1.push(arr[i]);
+                            System.out.println("pushed "+arr[i]+" index: "+i+ "stack st1");
+                            lastInsertedStack = true;
+                        }
+                        else
+                        {
+                            return "INVALID";
+                        }
+                    }
+                }
+            }
+        }
+        if(lastInsertedStack == true)
+        {
+            System.out.println("last inserted is stack1");
+            if(!st2.isEmpty())
+                return "INVALID";
+            else
+                return "VALID";
+        }
+        else
+        {
+            System.out.println("Last inserted is stack2");
+            if(!st1.isEmpty())
+                return "INVALID";
+            else
+                return "VALID";
+        }
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+        WolfDelaymaster m = new WolfDelaymaster();
+        System.out.println(m.check("flowolf"));
+    }
+ 
+}
