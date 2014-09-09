@@ -1,0 +1,29 @@
+import java.util.*;
+public class UnsortedSequence {
+ 
+ 
+    public int[] getUnsorted(int[] arr)
+    {
+        Arrays.sort(arr);
+        int res[];
+        if(arr[0] == arr[arr.length-1])
+        {
+            res = new int[0];             
+            return res;
+        }
+        int i = arr.length-2;
+        while(arr[i] == arr[i+1])
+            i--;
+        res = arr.clone();
+        int temp;
+        temp = res[i];
+        res[i] = res[i+1];
+        res[i+1] = temp;
+        return res;
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+    }
+ 
+}
