@@ -1,0 +1,49 @@
+import java.util.*;
+public class CatsOnTheLineDiv2 {
+ 
+    public String getAnswer(int[] position, int[] count, int time)               
+    {
+        ArrayList<State> al = new ArrayList<State>();
+        for(int i=0; i<position.length; i++)
+        {
+            al.add(position[i], new State(count[i], time));
+        }
+        for(int i=0; i<time; i++)
+        {
+            for(int j=0; j<al.size(); j++)
+            {
+                State temp = al.get(j);
+                int val = temp.val + temp.list.get(i);
+                if(val <= 1)
+                    continue;
+                al.get(j).val = 1;
+                int p = al.get(j+1).list.get(i+1);
+                al.get(j+1).list.add(i+1, p+temp.val-1);
+            }
+        }
+         
+        for(State s: al)
+        {
+            if(s.val > 1)
+                return "Impossible";
+        }
+        return "Possible";
+    }
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+ 
+    }
+ 
+}
+class State
+{
+    int val;
+    ArrayList<Integer> list;
+    State(int val, int time)
+    {
+        this.val = val;
+        this.list = new ArrayList<Integer>();
+        for(int i=0; i<time; i++)
+            this.list.add(time, 0);
+    }
+}
