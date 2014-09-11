@@ -1,0 +1,59 @@
+/*******************************************************************************/ 
+  public int min = Integer.MAX_VALUE;
+   
+  public  int minSums(String s, int target)
+   {
+      int plusCount = 0;
+      int index = 0;
+      String buf = "";
+      minSumsUtil(s, buf, target, plusCount, index);
+      if(min == Integer.MAX_VALUE)
+          return -1;
+      else
+          return min;
+   } 
+    
+  public void minSumsUtil(String str, String buf, int target, int plusCount, int index)
+   {
+      int sum = 0;
+      if(index >= str.length())
+      {
+        String[] strArr = buf.split("\\+");
+        for(String sTemp: strArr)
+        {
+         sum += Integer.parseInt(sTemp);
+         System.out.println("sTemp:"+sTemp);
+        }
+        System.out.println("plus count: "+plusCount+" sum: "+sum);
+        if(sum == target)
+        {
+          min = Math.min(min, plusCount);
+          System.out.println("min updated: "+min);
+        }
+      }
+      else
+      {
+          if(index == 0)
+              minSumsUtil(str, ""+str.charAt(index), target, plusCount, index+1);
+          else
+          {
+                 minSumsUtil(str, buf+"+"+str.charAt(index), target, plusCount+1, index+1);
+                 minSumsUtil(str, buf+str.charAt(index), target, plusCount, index+1);
+              }
+          }
+      }
+  public static void main(String args[])
+  {
+      QuickSums q = new QuickSums();
+     // System.out.println(q.minSums("123", 6));
+     /* ArrayList<Integer> set = new ArrayList<Integer>();
+      set.add(1);
+      set.add(2);
+      set.add(3);
+      ArrayList<ArrayList<Integer>> allSubsets = q.getPowerSet1(set);
+      for(ArrayList<Integer> list: allSubsets)
+          System.out.println(list.toString());*/
+      int coins[] = new int[]{1,3,5};
+      System.out.println(q.minCoins(coins, 11));
+  }
+}
