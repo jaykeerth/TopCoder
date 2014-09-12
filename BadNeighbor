@@ -8,7 +8,7 @@ public class BadNeighbors {
 	}
 	public int getAnswer(int i, int j)
 	{
-		int key = (i * 13) + j;                 //memoize it for quick result in testcase4
+		int key = (i * 13) + j;                 //memoize it for quick result in testcases 4 and 5
 		if(hm.containsKey(key))
 			return hm.get(key);
 		if(i > j)
