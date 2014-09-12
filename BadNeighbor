@@ -1,0 +1,20 @@
+import java.util.*;
+public class BadNeighbors {
+	int don[];
+	HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+	public int maxDonations(int[] donations) {
+		don = donations;
+		return Math.max(getAnswer(0, donations.length-2), getAnswer(1, donations.length-1));
+	}
+	public int getAnswer(int i, int j)
+	{
+		int key = (i * 13) + j;                 //memoize it for quick result in testcase4
+		if(hm.containsKey(key))
+			return hm.get(key);
+		if(i > j)
+			return 0;
+		int val = Math.max(getAnswer(i+1, j), getAnswer(i+2, j) + don[i]);
+	    hm.put(key, val);
+	    return val;
+	}
+}
