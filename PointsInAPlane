@@ -16,7 +16,7 @@ public class PointsInAPlane {
 				for(int k=j+1; k<arr.length; k++)
 				{
 					System.out.println(i+","+j+","+k);
-					if(check(arr[i], arr[j], arr[k]) == false)
+					if(checkCollinearity(arr[i], arr[j], arr[k]) == false)
 					{
 						//System.out.println(i+","+j+","+k);
 						count++;
@@ -26,7 +26,7 @@ public class PointsInAPlane {
 		}
 		return count;
 	}
-	public boolean check(State p, State q, State r)
+	public boolean checkCollinearity(State p, State q, State r)
 	{
 	    int a = (q.y - p.y) * (r.x - q.x);
 	    int b = (q.x - p.x) * (r.y - q.y);
