@@ -1,0 +1,176 @@
+import java.util.*;
+public class ChemicalMixing {
+
+	public double closestBlend(int[] volume, int[] solute, int minVolume, double desiredStrength) {
+		State arr[] = new State[volume.length];
+		for(int i=0; i<volume.length; i++)
+		{
+			arr[i] = new State(volume[i], solute[i]);
+		}
+		//double minDiff = Double.MAX_VALUE;
+		ArrayList<Double> al = new ArrayList<Double>();
+		for(long i=0; i<(1L<<volume.length); i++)
+		{
+			long k = i;
+			int index = 0;
+			int tempVol = 0;
+			int tempSol = 0;
+			while(k > 0)
+			{
+				if((k & 1) > 0)
+				{
+					tempVol += arr[index].x;
+					tempSol += arr[index].y;
+				}
+				if(tempVol >= minVolume)
+				{
+					
+					double tempStr = (double)tempSol/tempVol;
+					double p = Math.abs(tempStr - desiredStrength);
+					System.out.println("vol: "+tempVol+", sol: "+tempSol+ "tempstrength: "+tempStr+ ", diff: "+p);
+					al.add(p);
+				    //minDiff = Math.min(minDiff, p);		    
+				}
+				k >>= 1;
+		        index++;
+			}
+		}
+		Collections.sort(al);
+		return al.get(0);
+	}
+}
+class State
+{
+	int x;
+	int y;
+	State(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+}
+
+/*
+2014 India University Tour
+
+1000 - Example testcases passed
+
+
+Problem Statement 
+
+     
+Your lab has several containers of a certain type of chemical, each with varying volume, and varying quantity of dissolved solute. The strength of any container can be calculated as solute / volume. volume[i] and solute[i] represent the volume and quantity of solvent in container i.
+
+
+You now wish to mix a batch of the chemical, and can do so only by using the entirety of some subset of the available containers. That is, you cannot use part of what is left in any container, you must use all or none of each container. You need to produce at least minQuantity volume total after mixing, and you want the end result to have a strength as close as possible to desiredStrength. Compute the absolute difference between the desired strength and the closest strength you can create by mixing checmicals to obtain the minimum required volume.
+ 
+
+Definition 
+
+     
+Class: ChemicalMixing 
+Method: closestBlend 
+Parameters: int[], int[], int, double 
+Returns: double 
+Method signature: double closestBlend(int[] volume, int[] solute, int minVolume, double desiredStrength) 
+(be sure your method is public) 
+ 
+
+Limits 
+
+     
+Time limit (s): 2.000 
+Memory limit (MB): 256 
+ 
+
+Notes 
+
+- * A return value that is within 1e-9 of the actual result is considered correct. 
+
+Constraints 
+
+- volume will have between 1 and 50 elements, inclusive. 
+- Each element of volume will be between 1 and 100, inclusive. 
+- solute will have the same number of elements as volume. 
+- Each element of solute will be between 0 and 20, inclusive. 
+- minVolume will be between 1 and the sum of all elements of volume. 
+- desiredStrength will be between 0 and 10, inclusive. 
+
+Examples 
+
+0)  
+     
+
+{10, 10}
+ 
+{1, 4}
+ 
+5
+ 
+0.20
+ 
+ 
+Returns: 0.04999999999999999
+ 
+
+Either container is sufficient volume on it's own, but the strength would be 0.1 or 0.4, a difference from our desired strength by 0.1 or 0.2. However, if we combine the two, the resultant strength of the chemical is 0.25, an error of only 0.05, which is better. 
+ 
+ 
+1)  
+     
+
+{10, 10, 10, 10}
+ 
+{ 5,  5,  5,  0} 
+ 
+35
+ 
+0.5
+ 
+ 
+Returns: 0.125
+ 
+
+Although the first three containers are exactly the right strength, we need to mix all four containers to get a sufficient volume. The resulting strength is 0.375, an error of 0.125. 
+ 
+ 
+2)  
+     
+
+{20, 20, 20}
+ 
+{15, 15, 0}
+ 
+40
+ 
+0.5
+ 
+ 
+Returns: 0.0
+ 
+
+Although any two containers would suffice to meet the required volume, if we use all three, we can precisely hit the desired strength. 
+ 
+ 
+3)  
+     
+
+{50, 50, 50, 50}
+ 
+{12, 4, 20, 0}
+ 
+100
+ 
+0.5
+ 
+ 
+Returns: 0.18
+ 
+
+ 
+ 
+ 
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc. Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited. (c)2003, TopCoder, Inc. All rights reserved. 
+
+*/
