@@ -1,0 +1,28 @@
+public class TrafficCongestionDivTwo {
+  public long theMinCars(int treeHeight) {
+     if(treeHeight <= 1)
+     {
+	     return 1;
+     }
+     long total = 0;
+     for(int i=treeHeight-1; i>=0; i-=2)
+     {
+	     long temp = (long)Math.pow(2, i);
+	     total += temp;
+     }
+     if((treeHeight-1) % 2 == 1)
+	     total += 1;
+    return total;
+}
+
+//Another Solution
+	public long theMinCars(int treeHeight) {
+		long total = 0;
+		long nodes = (long) Math.pow(2, treeHeight+1) - 1;
+	    total = nodes/3;
+	    if(nodes % 3 != 0)
+	    	total++;
+		return total;
+		}
+}
+
