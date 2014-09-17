@@ -25,7 +25,7 @@ public class TheLuckyString {
 		return count;
 	}
 
-	/*public int count(String s) {
+	/*public int count(String s) {                           //times out for 3rd testcase
 		ArrayList<String> list = new ArrayList<String>();
 		list = getNextPermutation(s);
 	    //System.out.println(list.size());
