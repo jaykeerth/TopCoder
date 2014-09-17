@@ -36,7 +36,7 @@ public class TheLuckyString {
 		int i;
 		for(String st: list)
 		{
-			if(hmOverall.containsKey(st))
+			if(hmOverall.containsKey(st))             //Using HashMap hmOverall to process only distinct perms 
 				continue;
 			hmOverall.put(st, true);
 		    prev = st.charAt(0);
