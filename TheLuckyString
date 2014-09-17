@@ -1,0 +1,125 @@
+import java.util.*;
+public class TheLuckyString {
+
+	public int count(String s) {
+		HashMap<Character, Boolean> hm;
+		int count = 0;
+		char prev;
+		int i;
+		char arr[] = s.toCharArray();
+		Arrays.sort(arr);
+		String result = new String(arr);
+		while(result != null)            //3rd test case does not time out only when you generate distinct permutations. Note: only 64 Mb allowed
+		{
+		    prev = result.charAt(0);
+		    for(i=1; i<result.length(); i++)
+		    {
+		    	if(result.charAt(i) == prev)
+		    		break;
+		    	prev = result.charAt(i);
+		    }
+		    if(i == result.length())
+		    	count++;
+		    result = getNextPermutationUtil(result);
+		}
+		return count;
+	}
+
+	/*public int count(String s) {
+		ArrayList<String> list = new ArrayList<String>();
+		list = getNextPermutation(s);
+	    //System.out.println(list.size());
+		HashMap<Character, Boolean> hm;
+		HashMap<String, Boolean> hmOverall = new HashMap<String, Boolean>();
+		int count = 0;
+		char prev;
+		int i;
+		for(String st: list)
+		{
+			if(hmOverall.containsKey(st))
+				continue;
+			hmOverall.put(st, true);
+		    prev = st.charAt(0);
+		    for(i=1; i<st.length(); i++)
+		    {
+		    	if(st.charAt(i) == prev)
+		    		break;
+		    	prev = st.charAt(i);
+		    }
+		    if(i == st.length())
+		    	count++;
+		}
+		return count;
+	}*/
+
+	public ArrayList<String> getNextPermutation(String str)  
+	{
+		ArrayList<String> permList = new ArrayList<String>();
+		char[] arr = str.toCharArray();
+		Arrays.sort(arr);
+		String result = new String(arr);
+		while(result != null)
+		{
+			permList.add(result);
+			result = getNextPermutationUtil(result);
+		}
+		return permList;
+	}
+	public String getNextPermutationUtil(String str)       //lex, gives distinct perms when there are dup chars. 
+	  {
+		  char[] arr = new char[str.length()];
+		  arr = str.toCharArray();
+		  int i = arr.length - 2;
+		  while(i >= 0 && arr[i] >= arr[i+1])
+			  i--;
+		  if(i == -1)
+			  return null;
+		  int j = arr.length - 1;
+		  while(arr[j] <= arr[i])
+			  j--;
+		  char temp;
+		  temp = arr[i];
+		  arr[i] = arr[j];
+		  arr[j] = temp;
+		  int m = i + 1;
+		  int n = arr.length - 1;
+		  while(m < n)
+		  {
+			  temp = arr[m];
+			  arr[m] = arr[n];
+			  arr[n] = temp;
+			  m++;
+			  n--;
+		  }
+		  return new String(arr);
+	  }
+
+	public ArrayList<String> getPermutations(String str)       //all, no distinct
+	{
+		ArrayList<String> permList = new ArrayList<String>();
+		if(str == null)
+			return null;
+		if(str.length() == 0)
+		{
+			permList = new ArrayList<String>();
+			permList.add("");
+			return permList;
+		}
+		ArrayList<String> temp = getPermutations(str.substring(1));
+		char first = str.charAt(0);
+		for(String st: temp)
+		{
+			for(int i=0; i<=st.length(); i++)
+			{
+				permList.add(insertCharAt(st, first, i));
+			}
+		}
+		return permList;
+	}
+	public String insertCharAt(String st, char first, int i)
+	{
+		String left = st.substring(0, i);
+		String right = st.substring(i);
+		return left + first + right;
+	}
+}
